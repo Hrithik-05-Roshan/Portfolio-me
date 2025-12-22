@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Messages | Hrithik</title>
+
+  <style>
+    body {
+      background: #0f0f0f;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 700px;
+    }
+
+    li {
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    strong {
+      color: #00ffd5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Contact Messages</h1>
+
+  <ul id="messages">
+    <li>Loading messages...</li>
+  </ul>
+
+  <script>
+    const API_BASE = "https://portfolio-backend-c6ui.onrender.com";
+
+    fetch(`${API_BASE}/api/messages`)
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById("messages");
+
+        if (data.length === 0) {
+          list.innerHTML = "<li>No messages yet</li>";
+          return;
+        }
+
+        list.innerHTML = data
+          .map(m => `
+            <li>
+              <strong>${m.name}</strong><br/>
+              ${m.message}<br/>
+              <small>${new Date(m.createdAt).toLocaleString()}</small>
+            </li>
+          `)
+          .join("");
+      })
+      .catch(() => {
+        document.getElementById("messages").innerHTML =
+          "<li>Error loading messages</li>";
+      });
+  </script>
+
+</body>
+</html>
